@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".activities.MainActivity">
+
+    <Button
+        android:id="@+id/btnGestionFletes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gestión de Fletes"
+        android:layout_marginBottom="16dp"/>
+
+    <Button
+        android:id="@+id/btnGestionClientes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gestión de Clientes"
+        android:layout_marginBottom="16dp"/>
+    <Button
+        android:id="@+id/btnGestionConductores"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gestión de Conductores"
+        android:layout_marginBottom="16dp"/>
+
+    <Button
+        android:id="@+id/btnGestionVehiculos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gestión de Vehículos"/>
+
+
+</LinearLayout>

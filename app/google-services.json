@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "917503522221",
+    "project_id": "megasoftappv2",
+    "storage_bucket": "megasoftappv2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:917503522221:android:f946bbb3155fd83c0e5d24",
+        "android_client_info": {
+          "package_name": "py.edison.megasoftappv2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCX6NRUOkrsuuy-qtW_66mTNI7AgJC17NA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

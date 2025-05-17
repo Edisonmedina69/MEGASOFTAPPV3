@@ -1,0 +1,9 @@
+<resources>
+    <string-array name="estados_flete">
+        <item>TODOS</item>
+        <item>PENDIENTE</item>
+        <item>EN_PROCESO</item>
+        <item>ENTREGADO</item>
+        <item>CANCELADO</item>
+    </string-array>
+</resources>

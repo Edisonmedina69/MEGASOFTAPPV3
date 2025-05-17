@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <!-- Botón Filtrar por Fecha en la parte superior derecha -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnFiltrarFecha"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:text="Filtrar por Fecha"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Botón Agregar Flete en la parte inferior derecha -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnAgregarFlete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:text="Agregar Nuevo Flete"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_marginTop="16dp"/>
+
+    <!-- RecyclerView entre los dos botones -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewFletes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/btnFiltrarFecha"
+        android:layout_above="@id/btnAgregarFlete"
+        android:padding="8dp"
+        android:clipToPadding="false"
+        tools:listitem="@layout/item_flete"/>
+
+    <!-- ProgressBar centrado -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+
+</RelativeLayout>
