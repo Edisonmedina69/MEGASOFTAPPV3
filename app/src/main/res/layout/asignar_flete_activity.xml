@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Asignar Detalles al Flete"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Cliente -->
+        <TextView android:text="Cliente:" />
+        <Spinner
+            android:id="@+id/spinnerClientes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- Conductor -->
+        <TextView android:text="Conductor disponible:" android:layout_marginTop="16dp"/>
+        <Spinner
+            android:id="@+id/spinnerConductores"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- Mercancía -->
+        <TextView android:text="Tipo de mercancía:" android:layout_marginTop="16dp"/>
+        <Spinner
+            android:id="@+id/spinnerMercancias"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <!-- Botón -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAsignarFlete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Crear Flete"
+            android:layout_marginTop="24dp"/>
+    </LinearLayout>
+</ScrollView>

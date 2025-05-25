@@ -1,42 +1,58 @@
 package py.edison.megasoftappv2.entidades;
 
+import android.util.Log;
+
+import com.google.firebase.Timestamp;
+import com.google.firebase.database.IgnoreExtraProperties;
+
 import java.util.List;
 
+@IgnoreExtraProperties
 public class Flete {
-
-    // Estados posibles
     public static final String PENDIENTE = "PENDIENTE";
     public static final String EN_PROCESO = "EN_PROCESO";
-    public static final String ENTREGADO = "ENTREGADO";
+    public static final String COMPLETADO = "COMPLETADO";
     public static final String CANCELADO = "CANCELADO";
 
     private String id;
+    private String clienteId;
+    private String conductorId;
+    private String vehiculoId;
+    private String adminId;
+    private String tipoMercanciaId;
     private String origen;
     private String destino;
-    private String fechaSalida;
-    private String fechaEntrega;
-    private String firmaDestinatario;
-    private String fotoEntrega;
+    private Long fechaSalida; // Cambiado de long a Long
+    private Timestamp fechaEntrega;
     private double distancia;
     private double peso;
     private double tarifa;
+    private double tarifaTotal;
     private String estado;
     private boolean urgente;
-    private List<Incidencias> incidencias;
+    private List<String> incidenciasIds;
 
-    // Estados permitidos
-    public boolean puedeCambiarA(String nuevoEstado) {
-        switch(this.estado) {
-            case PENDIENTE:
-                return EN_PROCESO.equals(nuevoEstado) || CANCELADO.equals(nuevoEstado);
-            case EN_PROCESO:
-                return ENTREGADO.equals(nuevoEstado) || CANCELADO.equals(nuevoEstado);
-            default:
-                return false;
-        }
+    public Flete() {
+        this.estado = PENDIENTE;
+        this.urgente = false;
+        Log.d("Flete", "Nueva instancia de Flete creada");
     }
 
-    // Getters y Setters
+    public Long getFechaSalida() {
+        return fechaSalida;
+    }
+
+    public void setFechaSalida(Long fechaSalida) {
+        this.fechaSalida = fechaSalida;
+    }
+
+    public Timestamp getFechaEntrega() {
+        return fechaEntrega;
+    }
+
+    public void setFechaEntrega(Timestamp fechaEntrega) {
+        this.fechaEntrega = fechaEntrega;
+    }
 
     public String getId() {
         return id;
@@ -44,6 +60,46 @@ public class Flete {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getClienteId() {
+        return clienteId;
+    }
+
+    public void setClienteId(String clienteId) {
+        this.clienteId = clienteId;
+    }
+
+    public String getConductorId() {
+        return conductorId;
+    }
+
+    public void setConductorId(String conductorId) {
+        this.conductorId = conductorId;
+    }
+
+    public String getVehiculoId() {
+        return vehiculoId;
+    }
+
+    public void setVehiculoId(String vehiculoId) {
+        this.vehiculoId = vehiculoId;
+    }
+
+    public String getAdminId() {
+        return adminId;
+    }
+
+    public void setAdminId(String adminId) {
+        this.adminId = adminId;
+    }
+
+    public String getTipoMercanciaId() {
+        return tipoMercanciaId;
+    }
+
+    public void setTipoMercanciaId(String tipoMercanciaId) {
+        this.tipoMercanciaId = tipoMercanciaId;
     }
 
     public String getOrigen() {
@@ -60,38 +116,6 @@ public class Flete {
 
     public void setDestino(String destino) {
         this.destino = destino;
-    }
-
-    public String getFechaSalida() {
-        return fechaSalida;
-    }
-
-    public void setFechaSalida(String fechaSalida) {
-        this.fechaSalida = fechaSalida;
-    }
-
-    public String getFechaEntrega() {
-        return fechaEntrega;
-    }
-
-    public void setFechaEntrega(String fechaEntrega) {
-        this.fechaEntrega = fechaEntrega;
-    }
-
-    public String getFirmaDestinatario() {
-        return firmaDestinatario;
-    }
-
-    public void setFirmaDestinatario(String firmaDestinatario) {
-        this.firmaDestinatario = firmaDestinatario;
-    }
-
-    public String getFotoEntrega() {
-        return fotoEntrega;
-    }
-
-    public void setFotoEntrega(String fotoEntrega) {
-        this.fotoEntrega = fotoEntrega;
     }
 
     public double getDistancia() {
@@ -118,6 +142,14 @@ public class Flete {
         this.tarifa = tarifa;
     }
 
+    public double getTarifaTotal() {
+        return tarifaTotal;
+    }
+
+    public void setTarifaTotal(double tarifaTotal) {
+        this.tarifaTotal = tarifaTotal;
+    }
+
     public String getEstado() {
         return estado;
     }
@@ -134,11 +166,11 @@ public class Flete {
         this.urgente = urgente;
     }
 
-    public List<Incidencias> getIncidencias() {
-        return incidencias;
+    public List<String> getIncidenciasIds() {
+        return incidenciasIds;
     }
 
-    public void setIncidencias(List<Incidencias> incidencias) {
-        this.incidencias = incidencias;
+    public void setIncidenciasIds(List<String> incidenciasIds) {
+        this.incidenciasIds = incidenciasIds;
     }
 }

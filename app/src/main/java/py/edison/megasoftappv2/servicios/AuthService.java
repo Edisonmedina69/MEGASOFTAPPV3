@@ -3,7 +3,7 @@ package py.edison.megasoftappv2.servicios;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class AuthService {
+public class    AuthService {
     private final FirebaseAuth mAuth;
 
     public AuthService() {

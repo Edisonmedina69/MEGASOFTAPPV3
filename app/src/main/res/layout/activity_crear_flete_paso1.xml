@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/etOrigen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Origen" />
+
+        <EditText
+            android:id="@+id/etDestino"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Destino" />
+
+        <EditText
+            android:id="@+id/etDistancia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Distancia"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/etPeso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Peso"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/etTarifa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Tarifa"
+            android:inputType="numberDecimal" />
+
+        <CheckBox
+            android:id="@+id/cbUrgente"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Urgente" />
+
+        <Button
+            android:id="@+id/btnsiguientePas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Siguiente"
+            android:layout_marginTop="16dp" />
+    </LinearLayout>
+</ScrollView>

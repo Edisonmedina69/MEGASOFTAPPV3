@@ -1,11 +1,11 @@
-
+package py.edison.megasoftappv2.adapters;
 
 import android.view.*;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import py.edison.megasoftappv2.R;
-import py.edison.megasoftappv2.entidades.Incidencias;
+import py.edison.megasoftappv2.entidades.Incidencia;
 
 
 import java.text.SimpleDateFormat;
@@ -14,10 +14,10 @@ import java.util.Locale;
 
 public class IncidenciasAdapter extends RecyclerView.Adapter<IncidenciasAdapter.ViewHolder> {
 
-    private final List<Incidencias> lista;
+    private final List<Incidencia> listaIncidencias;
 
-    public IncidenciasAdapter(List<Incidencias> lista) {
-        this.lista = lista;
+    public IncidenciasAdapter(List<Incidencia> lista) {
+        this.listaIncidencias = lista;
     }
 
     @NonNull
@@ -29,15 +29,15 @@ public class IncidenciasAdapter extends RecyclerView.Adapter<IncidenciasAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull IncidenciasAdapter.ViewHolder holder, int position) {
-        Incidencias i = lista.get(position);
+        Incidencia i = listaIncidencias.get(position);
         holder.txtDescripcion.setText(i.getDescripcion());
-        holder.txtEstado.setText("Estado: " + i.getGravedad());
-        holder.txtFecha.setText("Fecha: " + new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(i.getFecha().toDate()));
+
+        holder.txtFecha.setText("Fecha: " + new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()));
     }
 
     @Override
     public int getItemCount() {
-        return lista.size();
+        return listaIncidencias.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

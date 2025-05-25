@@ -1,5 +1,13 @@
 package py.edison.megasoftappv2.entidades;
 
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.IgnoreExtraProperties;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+@IgnoreExtraProperties
 public class Conductor {
     private String id;
     private String nombre;
@@ -8,20 +16,24 @@ public class Conductor {
     private String vehiculoAsignado;
     private boolean estado; // true=activo, false=inactivo
     private String fechaRegistro;
+    private String fechaUltimaActualizacion;
 
-    // Constructor vacío necesario para Firebase y otras librerías
+    // Constructor vacío necesario para Firebase
     public Conductor() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
+        this.fechaRegistro = sdf.format(new Date());
+        this.estado = true;
     }
 
     // Constructor con parámetros básicos
     public Conductor(String nombre, String telefono, String numeroLicencia) {
+        this();
         this.nombre = nombre;
         this.telefono = telefono;
         this.numeroLicencia = numeroLicencia;
-        this.estado = true; // Por defecto activo al crear
     }
 
-    // Getters y Setters
+    @Exclude
     public String getId() {
         return id;
     }
@@ -36,6 +48,7 @@ public class Conductor {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+        actualizarFechaModificacion();
     }
 
     public String getTelefono() {
@@ -44,6 +57,7 @@ public class Conductor {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
+        actualizarFechaModificacion();
     }
 
     public String getNumeroLicencia() {
@@ -52,6 +66,7 @@ public class Conductor {
 
     public void setNumeroLicencia(String numeroLicencia) {
         this.numeroLicencia = numeroLicencia;
+        actualizarFechaModificacion();
     }
 
     public String getVehiculoAsignado() {
@@ -60,6 +75,7 @@ public class Conductor {
 
     public void setVehiculoAsignado(String vehiculoAsignado) {
         this.vehiculoAsignado = vehiculoAsignado;
+        actualizarFechaModificacion();
     }
 
     public boolean isEstado() {
@@ -68,6 +84,7 @@ public class Conductor {
 
     public void setEstado(boolean estado) {
         this.estado = estado;
+        actualizarFechaModificacion();
     }
 
     public String getFechaRegistro() {
@@ -78,17 +95,37 @@ public class Conductor {
         this.fechaRegistro = fechaRegistro;
     }
 
-    // Método toString para debugging
+    public String getFechaUltimaActualizacion() {
+        return fechaUltimaActualizacion;
+    }
+
+    public void setFechaUltimaActualizacion(String fechaUltimaActualizacion) {
+        this.fechaUltimaActualizacion = fechaUltimaActualizacion;
+    }
+
+    @Exclude
+    private void actualizarFechaModificacion() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
+        this.fechaUltimaActualizacion = sdf.format(new Date());
+    }
+
+    @Exclude
+    public String getEstadoTexto() {
+        return estado ? "Activo" : "Inactivo";
+    }
+
+    @Exclude
     @Override
     public String toString() {
         return "Conductor{" +
                 "id='" + id + '\'' +
                 ", nombre='" + nombre + '\'' +
                 ", telefono='" + telefono + '\'' +
-                ", numeroLicencia='" + numeroLicencia + '\'' +
-                ", vehiculoAsignado='" + vehiculoAsignado + '\'' +
-                ", estado=" + estado +
-                ", fechaRegistro='" + fechaRegistro + '\'' +
+                ", licencia='" + numeroLicencia + '\'' +
+                ", vehiculo='" + vehiculoAsignado + '\'' +
+                ", estado=" + getEstadoTexto() +
+                ", registro='" + fechaRegistro + '\'' +
+                ", última actualización='" + fechaUltimaActualizacion + '\'' +
                 '}';
     }
 }

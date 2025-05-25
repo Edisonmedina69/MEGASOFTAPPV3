@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import py.edison.megasoftappv2.R;
-import py.edison.megasoftappv2.activities.Fletes.DetalleFleteActivity;
+import py.edison.megasoftappv2.activities.Fletes.CrearFletePaso1Activity;
 import py.edison.megasoftappv2.adapters.FleteAdapter;
 import py.edison.megasoftappv2.entidades.Flete;
 import py.edison.megasoftappv2.servicios.FleteService;
@@ -48,7 +48,7 @@ public class FleteListFragment extends Fragment {
         fleteService.listarFletes(new FleteService.FletesListCallback() {
             @Override
             public void onSuccess(List<Flete> fletes) {
-                adapter.actualizarLista(fletes);
+               // adapter.actualizarLista(fletes);
             }
 
             @Override
@@ -59,7 +59,7 @@ public class FleteListFragment extends Fragment {
     }
 
     private void abrirDetalleFlete(String fleteId) {
-        Intent intent = new Intent(getActivity(), DetalleFleteActivity.class);
+        Intent intent = new Intent(getActivity(), CrearFletePaso1Activity.class);
         intent.putExtra("FLETE_ID", fleteId);
         startActivity(intent);
     }

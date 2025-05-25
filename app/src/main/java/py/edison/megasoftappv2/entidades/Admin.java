@@ -1,12 +1,17 @@
 package py.edison.megasoftappv2.entidades;
 
-public class Admin {
 
+
+public class Admin {
     private String id;
     private String nombre;
-    private String correo;
+    private String email;
     private String telefono;
 
+    // Constructor
+    public Admin() {}
+
+    // Getters y Setters
     public String getId() {
         return id;
     }
@@ -23,12 +28,12 @@ public class Admin {
         this.nombre = nombre;
     }
 
-    public String getCorreo() {
-        return correo;
+    public String getEmail() {
+        return email;
     }
 
-    public void setCorreo(String correo) {
-        this.correo = correo;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getTelefono() {

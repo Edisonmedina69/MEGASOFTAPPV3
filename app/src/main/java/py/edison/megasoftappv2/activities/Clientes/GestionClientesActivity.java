@@ -9,7 +9,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import py.edison.megasoftappv2.R;
-import py.edison.megasoftappv2.activities.Fletes.CrearFleteActivity;
+import py.edison.megasoftappv2.activities.Fletes.CrearFletePaso1Activity;
 import py.edison.megasoftappv2.adapters.ClientAdapter;
 import py.edison.megasoftappv2.entidades.Client;
 import py.edison.megasoftappv2.servicios.ClienteListCallback;
@@ -60,8 +59,8 @@ public class GestionClientesActivity extends AppCompatActivity implements Client
         //  clientAdapter = new FleteAdapter(new ArrayList<>(), this::mostrarDetalleFlete);
         recyclerView.setAdapter(clientAdapter);
 
-        findViewById(R.id.btnAgregarFlete).setOnClickListener(v ->
-                startActivity(new Intent(this, CrearFleteActivity.class)));
+        findViewById(R.id.fabAddClient).setOnClickListener(v ->
+                startActivity(new Intent(this, CrearFletePaso1Activity.class)));
     }
 
     private void inicializarVistas() {

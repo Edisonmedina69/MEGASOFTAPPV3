@@ -3,7 +3,6 @@ package py.edison.megasoftappv2.activities.Fletes;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -15,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.MaterialDatePicker;
 
 import java.text.SimpleDateFormat;
@@ -29,19 +27,16 @@ import py.edison.megasoftappv2.adapters.FleteAdapter;
 import py.edison.megasoftappv2.entidades.Flete;
 import py.edison.megasoftappv2.servicios.FleteService;
 
-
 public class GestionFletesActivity extends AppCompatActivity {
 
     private static final String TAG_DATE_RANGE = "RANGO_FECHAS";
     private static final String TAG_DATE_START = "DATE_PICKER_INICIO";
     private static final String TAG_DATE_END = "DATE_PICKER_FIN";
 
-
     private FleteAdapter adapter;
     private FleteService fleteService;
     private List<Flete> listaFletes = new ArrayList<>();
     private ProgressBar progressBar;
-    private MaterialButton btnFiltrarFecha;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +50,6 @@ public class GestionFletesActivity extends AppCompatActivity {
 
     private void inicializarVistas() {
         progressBar = findViewById(R.id.progressBar);
-        btnFiltrarFecha = findViewById(R.id.btnFiltrarFecha);
 
         // Configurar RecyclerView
         RecyclerView recyclerView = findViewById(R.id.recyclerViewFletes);
@@ -65,51 +59,20 @@ public class GestionFletesActivity extends AppCompatActivity {
 
         // Listeners
         adapter.setOnItemClickListener(this::abrirDetalleFlete);
-        findViewById(R.id.btnAgregarFlete).setOnClickListener(v -> abrirCrearFlete());
-        btnFiltrarFecha.setOnClickListener(v -> mostrarSelectorFechas());
-    }
-    private void mostrarSelectorRangoFechas() {
-        MaterialDatePicker.Builder<androidx.core.util.Pair<Long, Long>> builder = MaterialDatePicker.Builder.dateRangePicker();
-        builder.setTitleText("Seleccionar rango");
 
-        MaterialDatePicker<androidx.core.util.Pair<Long, Long>> picker = builder.build();
-        picker.addOnPositiveButtonClickListener(selection -> {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-            aplicarFiltros("",
-                    sdf.format(new Date(selection.first)),
-                    sdf.format(new Date(selection.second)));
+        // Configurar FAB para agregar fletes y mostrar opciones de filtro
+        findViewById(R.id.fabAddFlete).setOnClickListener(v -> {
+            new AlertDialog.Builder(this)
+                    .setTitle("Opciones")
+                    .setItems(new String[]{"Agregar Flete", "Filtrar por Fecha"}, (dialog, which) -> {
+                        if (which == 0) {
+                            abrirCrearFlete();
+                        } else {
+                            mostrarSelectorFechas();
+                        }
+                    })
+                    .show();
         });
-        picker.show(getSupportFragmentManager(), "DATE_PICKER");
-    }
-
-
-
-    private void configurarVista() {
-        // 1. Configuración del ProgressBar
-        progressBar = findViewById(R.id.progressBar);
-
-        // 2. Configuración del RecyclerView
-        configurarRecyclerView();
-
-        // 3. Configuración de botones
-        configurarBotones();
-    }
-
-    private void configurarRecyclerView() {
-        RecyclerView recyclerView = findViewById(R.id.recyclerViewFletes);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new FleteAdapter(listaFletes, this);
-        recyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener(this::abrirDetalleFlete);
-    }
-
-    private void configurarBotones() {
-        // Configuración del botón Agregar
-        findViewById(R.id.btnAgregarFlete).setOnClickListener(v -> abrirCrearFlete());
-
-        // Configuración del botón Filtrar (evitando duplicación)
-        btnFiltrarFecha = findViewById(R.id.btnFiltrarFecha);
-        btnFiltrarFecha.setOnClickListener(v -> mostrarSelectorFechas());
     }
 
     private void mostrarSelectorFechas() {
@@ -137,7 +100,7 @@ public class GestionFletesActivity extends AppCompatActivity {
     }
 
     private void abrirDetalleFlete(Flete flete) {
-        Intent intent = new Intent(this, DetalleFleteActivity.class);
+        Intent intent = new Intent(this, CrearFletePaso1Activity.class);
         intent.putExtra("FLETE_ID", flete.getId());
         startActivity(intent);
     }
@@ -170,7 +133,7 @@ public class GestionFletesActivity extends AppCompatActivity {
     }
 
     private void abrirCrearFlete() {
-        startActivity(new Intent(this, CrearFleteActivity.class));
+        startActivity(new Intent(this, CrearFletePaso1Activity.class));
     }
 
     private void mostrarDialogoFiltros() {
@@ -228,7 +191,7 @@ public class GestionFletesActivity extends AppCompatActivity {
                 try {
                     Date fechaInicioDate = sdf.parse(fechaInicio);
                     Date fechaFinDate = sdf.parse(fechaFin);
-                    Date fechaFlete = sdf.parse(f.getFechaSalida());
+                    Date fechaFlete = sdf.parse(String.valueOf(f.getFechaSalida()));
 
                     coincideFecha = (fechaFlete.equals(fechaInicioDate) || fechaFlete.after(fechaInicioDate)) &&
                             (fechaFlete.equals(fechaFinDate) || fechaFlete.before(fechaFinDate));
@@ -243,7 +206,7 @@ public class GestionFletesActivity extends AppCompatActivity {
                 filtrados.add(f);
             }
         }
-        adapter.actualizarLista(filtrados);
+        //adapter.actualizarLista(filtrados);
     }
 
     @Override

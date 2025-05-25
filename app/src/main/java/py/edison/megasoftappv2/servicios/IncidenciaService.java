@@ -1,36 +1,23 @@
 package py.edison.megasoftappv2.servicios;
 
-import py.edison.megasoftappv2.entidades.Incidencias;
-import java.util.ArrayList;
-import java.util.List;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import py.edison.megasoftappv2.entidades.Incidencia;
+import py.edison.megasoftappv2.interfaces.IncidenciaCallback;
 
 public class IncidenciaService {
-    private List<Incidencias> incidencias;
+    private DatabaseReference dbRef;
 
     public IncidenciaService() {
-        this.incidencias = new ArrayList<>();
+        dbRef = FirebaseDatabase.getInstance().getReference("incidencias");
     }
 
-    public void registrarIncidencia(Incidencias incidencia) {
-        incidencias.add(incidencia);
-    }
-
-    public List<Incidencias> obtenerIncidenciasPorFlete(String fleteId) {
-        List<Incidencias> resultado = new ArrayList<>();
-        for (Incidencias i : incidencias) {
-            if (i.getFleteId().equals(fleteId)) {
-                resultado.add(i);
-            }
-        }
-        return resultado;
-    }
-
-    public void marcarIncidenciaComoResuelta(String incidenciaId) {
-        for (Incidencias i : incidencias) {
-            if (i.getId().equals(incidenciaId)) {
-                i.setResuelta(true);
-                break;
-            }
-        }
+    public void reportarIncidencia(Incidencia incidencia, IncidenciaCallback callback) {
+        String id = dbRef.push().getKey();
+        incidencia.setId(id);
+        dbRef.child(id).setValue(incidencia)
+                .addOnSuccessListener(aVoid -> callback.onSuccess(incidencia))
+                .addOnFailureListener(e -> callback.onError(e.getMessage()));
     }
 }

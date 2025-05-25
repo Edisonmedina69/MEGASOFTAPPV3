@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <include layout="@layout/layout_flete_form"/>
+        <include layout="@layout/activity_crear_flete_paso2"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnGuardarFlete"

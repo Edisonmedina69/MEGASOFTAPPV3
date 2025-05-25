@@ -22,7 +22,7 @@ import py.edison.megasoftappv2.adapters.ConductorAdapter;
 import py.edison.megasoftappv2.entidades.Conductor;
 import py.edison.megasoftappv2.servicios.ConductorService;
 
-public class GestionConductoresActivity extends AppCompatActivity {
+public class GestionConductoresActivity extends AppCompatActivity implements ConductorAdapter.OnConductorClickListener {
 
     private ConductorAdapter conductorAdapter;
     private ConductorService conductorService;
@@ -46,19 +46,30 @@ public class GestionConductoresActivity extends AppCompatActivity {
 
     private void inicializarVistas() {
         progressBar = findViewById(R.id.progressBar);
-       recyclerViewConductores = findViewById(R.id.recyclerViewFletes);
-       fabAddConductor = findViewById(R.id.fabAddConductor);
+        recyclerViewConductores = findViewById(R.id.recyclerViewConductores);
+        fabAddConductor = findViewById(R.id.fabAddConductor);
     }
 
     private void configurarRecyclerView() {
-        // conductorAdapter = new ConductorAdapter(conductores, this);
+        conductorAdapter = new ConductorAdapter(conductores, new ConductorAdapter.OnConductorClickListener() {
+            @Override
+            public void onConductorClick(int position) {
+                mostrarDialogoConductor(conductores.get(position));
+            }
+
+            @Override
+            public void onConductorLongClick(int position) {
+                mostrarDialogoConfirmarEliminacion(conductores.get(position));
+            }
+        });
+
         recyclerViewConductores.setLayoutManager(new LinearLayoutManager(this));
-        //  recyclerViewConductores.setAdapter(conductorAdapter);
+        recyclerViewConductores.setAdapter(conductorAdapter);
     }
 
     private void cargarConductores() {
-        /* showProgress();
-        conductorService.listarTodosCondutores(new ConductorService.ConductorListCallback() {
+        showProgress();
+        conductorService.listarTodosConductores(new ConductorService.ConductorListCallback() {
             @Override
             public void onSuccess(List<Conductor> listaConductores) {
                 hideProgress();
@@ -72,7 +83,7 @@ public class GestionConductoresActivity extends AppCompatActivity {
                 hideProgress();
                 mostrarError("Error al cargar conductores: " + error);
             }
-        });*/
+        });
     }
 
     private void mostrarDialogoConductor(Conductor conductorExistente) {
@@ -128,12 +139,12 @@ public class GestionConductoresActivity extends AppCompatActivity {
         return true;
     }
 
- //   @Override
+    @Override
     public void onConductorClick(int position) {
         mostrarDialogoConductor(conductores.get(position));
     }
 
-    //@Override
+    @Override
     public void onConductorLongClick(int position) {
         mostrarDialogoConfirmarEliminacion(conductores.get(position));
     }
@@ -148,8 +159,8 @@ public class GestionConductoresActivity extends AppCompatActivity {
     }
 
     private void guardarConductor(Conductor conductor) {
-       /* showProgress();
-        conductorService.registrarConductores(conductor, new ConductorService.ConductorListCallback() {
+        showProgress();
+        conductorService.registrarConductor(conductor, new ConductorService.ConductorListCallback() {
             @Override
             public void onSuccess(List<Conductor> conductores) {
                 hideProgress();
@@ -162,11 +173,11 @@ public class GestionConductoresActivity extends AppCompatActivity {
                 hideProgress();
                 mostrarError("Error al registrar conductor: " + error);
             }
-        });*/
+        });
     }
 
     private void actualizarConductor(Conductor conductor) {
-       /*   showProgress();
+        showProgress();
         conductorService.actualizarConductor(conductor, new ConductorService.ConductorListCallback() {
             @Override
             public void onSuccess(List<Conductor> conductores) {
@@ -180,11 +191,11 @@ public class GestionConductoresActivity extends AppCompatActivity {
                 hideProgress();
                 mostrarError("Error al actualizar conductor: " + error);
             }
-        });*/
+        });
     }
 
     private void eliminarConductor(String conductorId) {
-     /*     showProgress();
+        showProgress();
         conductorService.eliminarConductor(conductorId, new ConductorService.ConductorListCallback() {
             @Override
             public void onSuccess(List<Conductor> conductores) {
@@ -198,7 +209,7 @@ public class GestionConductoresActivity extends AppCompatActivity {
                 hideProgress();
                 mostrarError("Error al eliminar conductor: " + error);
             }
-        });*/
+        });
     }
 
     private void showProgress() {

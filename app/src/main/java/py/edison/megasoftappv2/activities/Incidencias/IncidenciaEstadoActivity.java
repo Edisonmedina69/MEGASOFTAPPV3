@@ -10,6 +10,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.play.core.integrity.d;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.json.JSONException;
@@ -20,10 +21,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import py.edison.megasoftappv2.R;
-import py.edison.megasoftappv2.entidades.Incidencias;
+import py.edison.megasoftappv2.entidades.Incidencia;
+import py.edison.megasoftappv2.entidades.Incidencia;
 
 public class IncidenciaEstadoActivity extends AppCompatActivity {
-
+/*
     private FirebaseFirestore db;
     private String fleteId = "ID_DEL_FLETE"; // Pasar este ID real por intent o lógica de negocio
 
@@ -44,15 +46,23 @@ public class IncidenciaEstadoActivity extends AppCompatActivity {
     }
 
     private void guardarIncidencia(String descripcion) {
-        Incidencias incidencia = new Incidencias(
+        String fechaHora = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+
+    /*    Incidencia incidencia = new Incidencia(
                 fleteId,
-                descripcion,
-                new Date(),
-                "Leve",
-                false
+                descripcion, // nombre
+                "Incidencia registrada por el conductor", // descripción
+                fechaHora
         );
 
-        db.collection("incidencias")
+        // Solo si tu clase tiene estos métodos
+        incidencia.setEstado("Leve");
+   //     incidencia.setActivo(false);
+
+    }*/
+
+
+       /* db.collection("incidencias")
                 .add(incidencia)
                 .addOnSuccessListener(documentReference -> {
                     Log.d("FIREBASE", "Incidencia guardada");
@@ -63,7 +73,7 @@ public class IncidenciaEstadoActivity extends AppCompatActivity {
                 });
     }
 
-    private void enviarNotificacion(String descripcionSeleccionada) {
+    /*private void enviarNotificacion(String descripcionSeleccionada) {
         String tokenDestino = "TOKEN_DEL_CLIENTE_O_ADMIN"; // 🔁 reemplazá esto
 
         JSONObject body = new JSONObject();
@@ -95,5 +105,5 @@ public class IncidenciaEstadoActivity extends AppCompatActivity {
         };
 
         queue.add(request);
-    }
+    }*/
 }

@@ -12,19 +12,20 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import py.edison.megasoftappv2.R;
-import py.edison.megasoftappv2.activities.Fletes.DetalleFleteActivity;
+import py.edison.megasoftappv2.activities.Fletes.CrearFletePaso1Activity;
 import py.edison.megasoftappv2.entidades.Flete;
 
 public class FleteAdapter extends RecyclerView.Adapter<FleteAdapter.FleteViewHolder> {
     private List<Flete> listaFletes;
     private Context context;
     private OnItemClickListener itemClickListener;
-    
-
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
 
     public interface OnItemClickListener {
         void onItemClick(Flete flete);
@@ -39,6 +40,11 @@ public class FleteAdapter extends RecyclerView.Adapter<FleteAdapter.FleteViewHol
         this.itemClickListener = listener;
     }
 
+    public void actualizarLista(List<Flete> nuevaLista) {
+        this.listaFletes = nuevaLista != null ? nuevaLista : new ArrayList<>();
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public FleteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -51,46 +57,36 @@ public class FleteAdapter extends RecyclerView.Adapter<FleteAdapter.FleteViewHol
     public void onBindViewHolder(@NonNull FleteViewHolder holder, int position) {
         Flete flete = listaFletes.get(position);
 
-        // Setear los datos en los TextView
-        holder.tvOrigen.setText(flete.getOrigen());
-        holder.tvDestino.setText(flete.getDestino());
-        holder.tvEstado.setText(flete.getEstado());
-        holder.tvFecha.setText(flete.getFechaSalida());
+        // Setear datos
+        holder.tvOrigen.setText(flete.getOrigen() != null ? flete.getOrigen() : "N/A");
+        holder.tvDestino.setText(flete.getDestino() != null ? flete.getDestino() : "N/A");
 
-        // Cambiar color según estado
-        int colorRes, textColorRes;
-        switch (flete.getEstado()) {
-            case "ENTREGADO":
-                colorRes = R.color.verde_claro;
-                textColorRes = R.color.verde_oscuro;
-                break;
-            case "CANCELADO":
-                colorRes = R.color.rojo_claro;
-                textColorRes = R.color.rojo_oscuro;
-                break;
-            case "EN_PROCESO":
-                colorRes = R.color.azul_claro;
-                textColorRes = R.color.azul_oscuro;
-                break;
-            default: // PENDIENTE u otro
-                colorRes = R.color.amarillo_claro;
-                textColorRes = R.color.amarillo_oscuro;
+        // Estado automático como PENDIENTE (ya no viene del usuario)
+        String estado = "PENDIENTE"; // Estado fijo
+        holder.tvEstado.setText(estado);
+
+        // Formatear fecha
+        if (flete.getFechaSalida() != null) {
+            holder.tvFecha.setText(dateFormat.format(flete.getFechaSalida()));
+        } else {
+            holder.tvFecha.setText("Fecha no definida");
         }
 
-        holder.itemView.setBackgroundColor(ContextCompat.getColor(context, colorRes));
-        holder.tvEstado.setTextColor(ContextCompat.getColor(context, textColorRes));
+        // Establecer color según estado (ahora siempre PENDIENTE)
+        int[] colors = getEstadoColors(estado);
+        holder.itemView.setBackgroundColor(ContextCompat.getColor(context, colors[0]));
+        holder.tvEstado.setTextColor(ContextCompat.getColor(context, colors[1]));
 
-        // Manejar clic en el item
+        // Listeners
         holder.itemView.setOnClickListener(v -> {
             if (itemClickListener != null) {
                 itemClickListener.onItemClick(flete);
             }
         });
 
-        // En FleteAdapter
         holder.btnEditar.setOnClickListener(v -> {
-            Intent intent = new Intent(context, DetalleFleteActivity.class);
-            intent.putExtra("FLETE_ID", listaFletes.get(position).getId());
+            Intent intent = new Intent(context, CrearFletePaso1Activity.class);
+            intent.putExtra("FLETE_ID", flete.getId());
             intent.putExtra("MODO_EDICION", true);
             context.startActivity(intent);
         });
@@ -101,23 +97,36 @@ public class FleteAdapter extends RecyclerView.Adapter<FleteAdapter.FleteViewHol
         return listaFletes.size();
     }
 
-    public void actualizarLista(List<Flete> nuevosFletes) {
-        this.listaFletes.clear();
-        this.listaFletes.addAll(nuevosFletes != null ? nuevosFletes : new ArrayList<>());
-        notifyDataSetChanged();
+    private int[] getEstadoColors(String estado) {
+        // Simplificado ya que siempre será PENDIENTE
+        return new int[]{R.color.amarillo_claro, R.color.amarillo_oscuro};
+
+        /* Versión original por si necesitas mantener otros estados:
+        switch (estado) {
+            case "COMPLETADO":
+                return new int[]{R.color.verde_claro, R.color.verde_oscuro};
+            case "CANCELADO":
+                return new int[]{R.color.rojo_claro, R.color.rojo_oscuro};
+            case "EN_PROCESO":
+                return new int[]{R.color.azul_claro, R.color.azul_oscuro};
+            case "PENDIENTE":
+            default:
+                return new int[]{R.color.amarillo_claro, R.color.amarillo_oscuro};
+        }
+        */
     }
 
     static class FleteViewHolder extends RecyclerView.ViewHolder {
-        public Button btnEditar;
         TextView tvOrigen, tvDestino, tvEstado, tvFecha;
+        Button btnEditar;
 
         public FleteViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvOrigen = itemView.findViewById(R.id.tvOrigen);
-            tvDestino = itemView.findViewById(R.id.tvDestino);
+            tvOrigen = itemView.findViewById(R.id.etOrigen);
+            tvDestino = itemView.findViewById(R.id.etDestino);
             tvEstado = itemView.findViewById(R.id.tvEstado);
-            tvFecha = itemView.findViewById(R.id.tvFecha);
+            tvFecha = itemView.findViewById(R.id.etFechaSalida);
+            btnEditar = itemView.findViewById(R.id.btneditarFlete);
         }
     }
-
 }

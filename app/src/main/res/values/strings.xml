@@ -10,4 +10,14 @@
         <item>Grave</item>
     </string-array>
 
+
+    <string name="agregar_vehiculo">Agregar vehículo</string>
+    <string name="matricula">Matrícula</string>
+    <string name="marca">Marca</string>
+    <string name="modelo">Modelo</string>
+    <string name="capacidad_kg">Capacidad (kg)</string>
+    <string name="disponible">Disponible</string>
+    <string name="nuevo_vehiculo">Nuevo vehículo</string>
+    <string name="editar_vehiculo">Editar vehículo</string>
+
 </resources>

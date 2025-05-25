@@ -1,0 +1,26 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/editDescripcion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Descripción de la incidencia"/>
+
+    <EditText
+        android:id="@+id/editTexto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Texto explicativo"/>
+
+    <Button
+        android:id="@+id/btnGuardarIncidencia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Guardar Incidencia"
+        android:layout_marginTop="16dp"/>
+</LinearLayout>

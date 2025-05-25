@@ -101,6 +101,43 @@
                 android:value=".activities.MainActivity" />
         </activity>
 
+        <activity
+            android:name=".activities.TipoMercaderia.GestionTipoMercanciaActivity"
+            android:exported="false"
+            android:parentActivityName=".activities.MainActivity">
+            <!-- Meta datos para la navegación Up -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".activities.Incidencias.IncidenciaEstadoActivity"
+            android:exported="false"
+            android:parentActivityName=".activities.MainActivity">
+            <!-- Meta datos para la navegación Up -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".activities.Fletes.CrearFletePaso1Activity"
+            android:exported="true"
+            android:parentActivityName=".activities.Fletes.GestionFletesActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.Fletes.GestionFletesActivity" />
+        </activity>
+
+        <activity
+            android:name=".activities.Fletes.CrearFletePaso2Activity"
+            android:exported="true"
+            android:parentActivityName=".activities.Fletes.CrearFletePaso1Activity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.Fletes.CrearFletePaso1Activity" />
+        </activity>
     </application>
 
 </manifest>

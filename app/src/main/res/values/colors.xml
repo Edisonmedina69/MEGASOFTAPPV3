@@ -21,6 +21,9 @@
         <color name="estado_pendiente">#FFA000</color>
         <color name="estado_asignado">#2196F3</color>
         <color name="estado_en_camino">#4CAF50</color>
-        <color name="estado_completado">#607D8B</color>
+        <color name="estado_completado">#607D8B</color
+            >
+    <color name="green">#4CAF50</color>
+    <color name="red">#F44336</color>
 
 </resources>

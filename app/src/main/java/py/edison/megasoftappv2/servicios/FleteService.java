@@ -1,58 +1,34 @@
 package py.edison.megasoftappv2.servicios;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import py.edison.megasoftappv2.entidades.ConfiguracionTarifa;
 import py.edison.megasoftappv2.entidades.Flete;
 import py.edison.megasoftappv2.utils.DateUtils;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 public class FleteService {
     private final DatabaseReference fletesRef;
+    private static final String TAG = "FleteService";
     private ValueEventListener activeListener;
 
     public FleteService() {
         this.fletesRef = FirebaseDatabase.getInstance().getReference("fletes");
-    }
-
-    // Actualizar flete completo
-    public void actualizarFlete(Flete flete, FleteCallback callback) {
-        if (flete.getId() == null || flete.getId().isEmpty()) {
-            callback.onError("El flete no tiene un ID válido");
-            return;
-        }
-
-        // Crear mapa con todos los campos a actualizar
-        Map<String, Object> updates = new HashMap<>();
-        updates.put("origen", flete.getOrigen());
-        updates.put("destino", flete.getDestino());
-        updates.put("distancia", flete.getDistancia());
-        updates.put("peso", flete.getPeso());
-        updates.put("tarifa", flete.getTarifa());
-        updates.put("estado", flete.getEstado());
-        updates.put("urgente", flete.isUrgente());
-        // Agrega aquí otros campos que necesites actualizar
-
-        fletesRef.child(flete.getId()).updateChildren(updates)
-                .addOnSuccessListener(aVoid -> {
-                    // Después de actualizar, obtenemos el flete actualizado para devolverlo
-                    obtenerFlete(flete.getId(), callback);
-                })
-                .addOnFailureListener(e -> callback.onError(e.getMessage()));
-    }
-
-    public double calcularPrecioFlete(int i, int i1, ConfiguracionTarifa tarifa, boolean b) {
-        return 0;
+        Log.d(TAG, "Servicio de Fletes inicializado");
     }
 
     public interface FleteCallback {
@@ -65,47 +41,84 @@ public class FleteService {
         void onError(String error);
     }
 
-    // Crear nuevo flete
     public void crearFlete(Flete flete, FleteCallback callback) {
-        String key = fletesRef.push().getKey();
-        flete.setId(key);
-        fletesRef.child(key).setValue(flete)
-                .addOnSuccessListener(aVoid -> callback.onSuccess(flete))
-                .addOnFailureListener(e -> callback.onError(e.getMessage()));
+        try {
+            Log.d(TAG, "Intentando crear nuevo flete");
+            String key = fletesRef.push().getKey();
+            if (key == null) {
+                Log.e(TAG, "No se pudo generar clave para nuevo flete");
+                callback.onError("Error al generar ID");
+                return;
+            }
+
+            flete.setId(key);
+            Log.d(TAG, "Flete a guardar: " + flete.toString());
+
+            fletesRef.child(key).setValue(flete)
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d(TAG, "Flete guardado exitosamente: " + key);
+                        callback.onSuccess(flete);
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e(TAG, "Error al guardar flete: " + e.getMessage(), e);
+                        callback.onError(e.getMessage());
+                    });
+        } catch (Exception e) {
+            Log.e(TAG, "Excepción al crear flete: " + e.getMessage(), e);
+            callback.onError("Error inesperado: " + e.getMessage());
+        }
     }
 
     // Obtener flete por ID
     public void obtenerFlete(String id, FleteCallback callback) {
-        fletesRef.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Flete flete = snapshot.getValue(Flete.class);
-                if (flete != null) {
-                    flete.setId(snapshot.getKey());
-                    callback.onSuccess(flete);
-                } else {
-                    callback.onError("Flete no encontrado");
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                callback.onError(error.getMessage());
-            }
-        });
-    }
-
-    // Actualizar campos específicos de un flete
-    public void actualizarCamposFlete(String fleteId, Map<String, Object> camposActualizados, FleteCallback callback) {
-        if (fleteId == null || fleteId.isEmpty()) {
+        if (id == null || id.isEmpty()) {
             callback.onError("ID de flete inválido");
             return;
         }
 
-        // Agregar fecha de actualización
-        camposActualizados.put("fechaActualizacion", DateUtils.getCurrentDateTime());
+        fletesRef.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                try {
+                    if (!snapshot.exists()) {
+                        callback.onError("Flete no encontrado");
+                        return;
+                    }
 
-        fletesRef.child(fleteId).updateChildren(camposActualizados)
-                .addOnSuccessListener(aVoid -> obtenerFlete(fleteId, callback))
+                    Flete flete = parseFleteFromSnapshot(snapshot);
+                    callback.onSuccess(flete);
+                } catch (Exception e) {
+                    Log.e("FIREBASE_ERROR", "Error al parsear flete", e);
+                    callback.onError("Error en los datos del flete: " + e.getMessage());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callback.onError("Error de Firebase: " + error.getMessage());
+            }
+        });
+    }
+
+    // Actualizar flete completo
+    public void actualizarFlete(Flete flete, FleteCallback callback) {
+        if (flete.getId() == null || flete.getId().isEmpty()) {
+            callback.onError("El flete no tiene un ID válido");
+            return;
+        }
+
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("origen", flete.getOrigen());
+        updates.put("destino", flete.getDestino());
+        updates.put("distancia", flete.getDistancia());
+        updates.put("peso", flete.getPeso());
+        updates.put("tarifa", flete.getTarifa());
+        updates.put("estado", flete.getEstado());
+        updates.put("urgente", flete.isUrgente());
+        updates.put("fechaActualizacion", DateUtils.getCurrentDateTime());
+
+        fletesRef.child(flete.getId()).updateChildren(updates)
+                .addOnSuccessListener(aVoid -> obtenerFlete(flete.getId(), callback))
                 .addOnFailureListener(e -> callback.onError(e.getMessage()));
     }
 
@@ -117,14 +130,16 @@ public class FleteService {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Flete> fletes = new ArrayList<>();
                 for (DataSnapshot data : snapshot.getChildren()) {
-                    Flete flete = data.getValue(Flete.class);
-                    if (flete != null) {
-                        flete.setId(data.getKey());
+                    try {
+                        Flete flete = parseFleteFromSnapshot(data);
                         fletes.add(flete);
+                    } catch (Exception e) {
+                        Log.e("FIREBASE_ERROR", "Error al parsear flete " + data.getKey(), e);
                     }
                 }
                 callback.onSuccess(fletes);
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 callback.onError(error.getMessage());
@@ -141,20 +156,74 @@ public class FleteService {
                 .addValueEventListener(createListener(callback));
     }
 
-    // Actualizar estado
+    // Actualizar solo el estado
     public void actualizarEstado(String fleteId, String nuevoEstado, FleteCallback callback) {
         Map<String, Object> updates = new HashMap<>();
         updates.put("estado", nuevoEstado);
         updates.put("fechaActualizacion", DateUtils.getCurrentDateTime());
 
-        fletesRef.child(fleteId).updateChildren(updates)
+        actualizarCamposFlete(fleteId, updates, callback);
+    }
+
+    // Actualizar campos específicos
+    public void actualizarCamposFlete(String fleteId, Map<String, Object> camposActualizados, FleteCallback callback) {
+        if (fleteId == null || fleteId.isEmpty()) {
+            callback.onError("ID de flete inválido");
+            return;
+        }
+
+        camposActualizados.put("fechaActualizacion", DateUtils.getCurrentDateTime());
+
+        fletesRef.child(fleteId).updateChildren(camposActualizados)
                 .addOnSuccessListener(aVoid -> obtenerFlete(fleteId, callback))
                 .addOnFailureListener(e -> callback.onError(e.getMessage()));
     }
 
-    public void cambiarEstadoFlete(Flete flete, String nuevoEstado) {
-        flete.setEstado(nuevoEstado);
-        // actualizar en Firebase o donde guardes
+    public void limpiarListeners() {
+        if (activeListener != null) {
+            fletesRef.removeEventListener(activeListener);
+            activeListener = null;
+        }
+    }
+
+    // Métodos auxiliares
+    private Flete parseFleteFromSnapshot(DataSnapshot snapshot) {
+        Flete flete = new Flete();
+        flete.setId(snapshot.getKey());
+        flete.setOrigen(snapshot.child("origen").getValue(String.class));
+        flete.setDestino(snapshot.child("destino").getValue(String.class));
+        flete.setEstado(snapshot.child("estado").getValue(String.class));
+        flete.setDistancia(parseFirebaseDouble(snapshot, "distancia"));
+        flete.setPeso(parseFirebaseDouble(snapshot, "peso"));
+        flete.setTarifa(parseFirebaseDouble(snapshot, "tarifa"));
+        flete.setTarifaTotal(parseFirebaseDouble(snapshot, "tarifaTotal"));
+        flete.setUrgente(Boolean.TRUE.equals(snapshot.child("urgente").getValue(Boolean.class)));
+
+        // Manejo de fechas (puedes adaptar según tu implementación)
+        Object fechaSalida = snapshot.child("fechaSalida").getValue();
+        if (fechaSalida instanceof Long) {
+
+            flete.setFechaSalida((Long) fechaSalida);
+        }
+
+        return flete;
+    }
+
+    private double parseFirebaseDouble(DataSnapshot snapshot, String key) {
+        Object value = snapshot.child(key).getValue();
+        if (value == null) return 0.0;
+
+        if (value instanceof Number) {
+            return ((Number) value).doubleValue();
+        } else if (value instanceof String) {
+            try {
+                return Double.parseDouble((String) value);
+            } catch (NumberFormatException e) {
+                Log.w("CONVERSION", "Valor no numérico para " + key + ": " + value);
+                return 0.0;
+            }
+        }
+        return 0.0;
     }
 
     private ValueEventListener createListener(FletesListCallback callback) {
@@ -163,24 +232,20 @@ public class FleteService {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 List<Flete> fletes = new ArrayList<>();
                 for (DataSnapshot data : snapshot.getChildren()) {
-                    Flete flete = data.getValue(Flete.class);
-                    if (flete != null) {
-                        flete.setId(data.getKey());
+                    try {
+                        Flete flete = parseFleteFromSnapshot(data);
                         fletes.add(flete);
+                    } catch (Exception e) {
+                        Log.e("FIREBASE_ERROR", "Error al parsear flete " + data.getKey(), e);
                     }
                 }
                 callback.onSuccess(fletes);
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 callback.onError(error.getMessage());
             }
         };
-    }
-
-    public void limpiarListeners() {
-        if (activeListener != null) {
-            fletesRef.removeEventListener(activeListener);
-        }
     }
 }
