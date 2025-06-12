@@ -47,7 +47,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Urgente" />
+        <CheckBox
+            android:id="@+id/cbProgramarFecha"
+            android:text="Programar para otra fecha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
+        <EditText
+            android:id="@+id/etFechaProgramada"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Seleccionar fecha"
+            android:focusable="false"
+            android:visibility="gone"/>
         <Button
             android:id="@+id/btnsiguientePas"
             android:layout_width="match_parent"
