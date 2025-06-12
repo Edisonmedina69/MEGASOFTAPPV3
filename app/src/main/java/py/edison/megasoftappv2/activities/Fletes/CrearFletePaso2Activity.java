@@ -262,23 +262,32 @@ public class CrearFletePaso2Activity extends AppCompatActivity {
         String mercanciaId = obtenerIdSeleccionado(spinnerMercancias);
         String vehiculoId = obtenerIdSeleccionado(spinnerVehiculos);
 
-        // Completar el flete
+        // Completar el flete con los datos seleccionados
         fleteTemporal.setClienteId(clienteId);
         fleteTemporal.setConductorId(conductorId);
         fleteTemporal.setTipoMercanciaId(mercanciaId);
         fleteTemporal.setVehiculoId(vehiculoId);
 
-        // Guardar en Firebase
+        // Guardar en Firebase y pasar a la siguiente actividad
         String fleteId = dbRef.child("fletes").push().getKey();
         if (fleteId != null) {
+            fleteTemporal.setId(fleteId); // Asignar el ID generado
+
+            // Primero guardamos en Firebase
             dbRef.child("fletes").child(fleteId).setValue(fleteTemporal)
                     .addOnSuccessListener(aVoid -> {
-                        Toast.makeText(this, "Flete creado exitosamente", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(this, GestionFletesActivity.class));
+                        // Luego pasamos a la siguiente actividad con el objeto completo
+                        Intent intent = new Intent(CrearFletePaso2Activity.this, CrearFletePaso3Activity.class);
+                        intent.putExtra("flete", fleteTemporal); // Pasar el objeto completo
+
+                        Toast.makeText(CrearFletePaso2Activity.this, "Flete creado exitosamente", Toast.LENGTH_SHORT).show();
+                        startActivity(intent);
                         finish();
                     })
                     .addOnFailureListener(e -> {
-                        Toast.makeText(this, "Error al guardar flete", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CrearFletePaso2Activity.this,
+                                "Error al guardar flete: " + e.getMessage(),
+                                Toast.LENGTH_SHORT).show();
                     });
         }
     }

@@ -29,6 +29,9 @@ public class FleteService {
     public FleteService() {
         this.fletesRef = FirebaseDatabase.getInstance().getReference("fletes");
         Log.d(TAG, "Servicio de Fletes inicializado");
+
+
+
     }
 
     public interface FleteCallback {
