@@ -1,6 +1,6 @@
 # 🚛 MEGASOFTAPPV3 - Sistema de Transporte de Carga  
 
-![Banner o Logo del Proyecto](https://ejemplo.com/banner.png)  
+
 
 > **Aplicación móvil para gestión de transporte de carga**  
 > Desarrollado en Android Studio + Firebase  
