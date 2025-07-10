@@ -1,6 +1,6 @@
 <!-- Banner/Portada con logo -->
 <div align="center">
-  <img src="assets/logo.png" alt="Logo MEGASOFTAPPV3" width="300">
+  
   <h1>MEGASOFTAPPV3</h1>
   <p><strong>Sistema Móvil de Gestión de Transporte de Carga</strong></p>
   <p>Desarrollado en Android Studio + Firebase</p>
@@ -13,7 +13,7 @@
 ---
 
 ## 📜 **Contrato de Uso (Términos y Condiciones)**  
-**Última actualización**: [Fecha]  
+**Última actualización**: [2025]  
 
 1. **Propiedad Intelectual**:  
    - Este software es propiedad de **Edison Medina** y está protegido bajo licencia MIT.  
@@ -29,7 +29,7 @@
    - Los datos se almacenan en Firebase. Revisa la [Política de Privacidad de Firebase](https://firebase.google.com/support/privacy).  
 
 > 📌 **Al utilizar este software, aceptas estos términos**.  
-> Para consultas legales: contacto@tucorreo.com.  
+> Para consultas legales: edisonmedina415@gmail.com.  
 
 ---
 
@@ -55,8 +55,7 @@
    ```bash
    git clone https://github.com/Edisonmedina69/MEGASOFTAPPV3.git
 
-   MIT License
-IT License
+
 
 Copyright (c) 2025 EDISON MEDINA VALEZ
 
